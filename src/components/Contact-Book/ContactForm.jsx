@@ -1,7 +1,7 @@
 import { nanoid } from 'nanoid';
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-
+import { useDispatch, useSelector } from 'react-redux';
 import {
   PhoneBookInputContainer,
   PhoneBookInputLabel,
@@ -10,12 +10,38 @@ import {
 } from './ContactBook.Styled';
 
 import { toast } from 'react-toastify';
+import {
+  clearName,
+  clearNumber,
+  clearValidName,
+  clearValidNumber,
+  updateName,
+  updateNumber,
+  updateValidName,
+  updateValidNumber,
+} from 'Redux/PhoneBook/actions';
+import {
+  selectIsNameValid,
+  selectIsNumberValid,
+  selectName,
+  selectNumber,
+} from 'Redux/PhoneBook/selectors';
+
+export const isNameExists = (contacts, name) => {
+  return contacts.some(contact => contact.name === name);
+};
+
+export const isNumberExists = (contacts, number) => {
+  return contacts.some(contact => contact.number === number);
+};
 
 export const ContactForm = props => {
-  const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
-  const [isNameValid, setIsNameValid] = useState(false);
-  const [isNumberValid, setIsNumberValid] = useState(false);
+  const dispatch = useDispatch();
+
+  const name = useSelector(selectName);
+  const number = useSelector(selectNumber);
+  const isNameValid = useSelector(selectIsNameValid);
+  const isNumberValid = useSelector(selectIsNumberValid);
 
   const handleNewContacts = e => {
     e.preventDefault();
@@ -32,10 +58,10 @@ export const ContactForm = props => {
         };
         props.addContact(newContact);
 
-        setName('');
-        setNumber('');
-        setIsNameValid(false);
-        setIsNumberValid(false);
+        dispatch(clearName());
+        dispatch(clearNumber());
+        dispatch(clearValidName());
+        dispatch(clearValidNumber());
       }
     }
   };
@@ -45,17 +71,20 @@ export const ContactForm = props => {
       /^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$/.test(
         newName
       );
-    setName(newName);
-    setIsNameValid(isValidName);
+
+    dispatch(updateName(newName));
+    dispatch(updateValidName(isValidName));
   };
+
   const handleNewNumber = e => {
     const newNumber = e.target.value.trim();
     const isValidNumber =
       /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/.test(
         newNumber
       );
-    setNumber(newNumber);
-    setIsNumberValid(isValidNumber);
+
+    dispatch(updateNumber(newNumber));
+    dispatch(updateValidNumber(isValidNumber));
   };
 
   return (

@@ -1,11 +1,8 @@
-import React, { useState, useEffect } from 'react';
-
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { ContactForm } from './Contact-Book/ContactForm';
-
 import { AppContainer, TitleContainer, ContentContainer } from './App.Styled';
-
 import { Filter } from './Contact-Book/Filter';
-
 import { ContactList } from './Contact-Book/ContactList';
 
 import {
@@ -15,68 +12,63 @@ import {
 } from './Contact-Book/ContactBook.Styled';
 
 import { getFilteredData } from 'helpers/getFilteredData';
-
 import { toast } from 'react-toastify';
-
 import { Phone, BookUser } from 'lucide-react';
+import { isNameExists, isNumberExists } from './Contact-Book/ContactForm';
 
+import {
+  deleteContact,
+  filterContact,
+  setContacts,
+  setFilter,
+} from 'Redux/PhoneBook/actions';
+import { selectContacts, selectFilter } from 'Redux/PhoneBook/selectors';
 export const App = () => {
-  const [filter, setFilter] = useState('');
-  const [contacts, setContacts] = useState([
-    { id: 'id-1', name: 'Vugar Gasimov', number: '684-02-29' },
-    { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-    { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-    { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-    { id: 'id-5', name: 'Rosie Simpson', number: '459-12-56' },
-    { id: 'id-6', name: 'Victor Brandon', number: '951-02-29' },
-    { id: 'id-7', name: 'Claver Eline', number: '357-89-12' },
-    { id: 'id-8', name: 'John Edison', number: '159-14-79' },
-    { id: 'id-9', name: 'Rosie Copeland', number: '357-92-26' },
-    { id: 'id-10', name: 'Anne Simpson', number: '753-12-56' },
-  ]);
+  const filter = useSelector(selectFilter);
+  const contacts = useSelector(selectContacts);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     toast.success('Welcome to Contact Book');
     const storedContacts =
       JSON.parse(window.localStorage.getItem('contacts')) ?? [];
     if (storedContacts && storedContacts.length > 0) {
-      setContacts(storedContacts);
+      dispatch(setContacts(storedContacts));
     }
+
     const storedFilter =
       JSON.parse(window.localStorage.getItem('filter')) ?? [];
     if (storedFilter) {
-      setFilter(storedFilter);
+      dispatch(setFilter(storedFilter));
     }
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     window.localStorage.setItem('contacts', JSON.stringify(contacts));
     window.localStorage.setItem('filter', JSON.stringify(filter));
   }, [contacts, filter]);
 
-  const handleFilterChange = filterValue => {
-    setFilter(filterValue);
-  };
-
   const addContact = newContact => {
-    setContacts([...contacts, newContact]);
-    toast.success('Nice new contact is added');
+    if (isNameExists(contacts, newContact.name)) {
+      toast.info('Contact with this name already exists');
+    } else if (isNumberExists(contacts, newContact.number)) {
+      toast.info('Contact with this number already exists');
+    } else {
+      dispatch(addContact(newContact));
+      toast.success('Nice new contact is added');
+    }
   };
 
-  const isNameExists = name => {
-    return contacts.some(contact => contact.name === name);
-  };
-  const isNumberExists = number => {
-    return contacts.some(contact => contact.number === number);
-  };
   const handleContactDelete = contactId => {
-    setContacts(prevContacts =>
-      prevContacts.filter(contact => contact.id !== contactId)
-    );
+    dispatch(deleteContact(contactId));
     toast.warning('Contact is deleted');
+  };
+  const handleFilterChange = filterValue => {
+    dispatch(filterContact(filterValue));
   };
 
   const filteredData = getFilteredData({ contacts, filter });
+
   return (
     <AppContainer>
       <TitleContainer>React homework template</TitleContainer>

@@ -5,10 +5,17 @@ import {
   PhoneBookInputLabel,
   PhoneBookInput,
 } from './ContactBook.Styled';
-export const Filter = ({ setFilter, filter }) => {
-  const handleFilterInput = e => {
-    const filter = e.target.value;
-    setFilter(filter);
+import { useDispatch, useSelector } from 'react-redux';
+import { handleFilterInput } from 'Redux/PhoneBook/actions';
+import { selectFilter } from 'Redux/PhoneBook/selectors';
+
+export const Filter = () => {
+  const filter = useSelector(selectFilter);
+  const dispatch = useDispatch();
+
+  const handleFilterChange = e => {
+    const newFilter = e.target.value;
+    dispatch(handleFilterInput(newFilter));
   };
   return (
     <PhoneBookInputContainer>
@@ -16,7 +23,7 @@ export const Filter = ({ setFilter, filter }) => {
       <PhoneBookInput
         value={filter}
         placeholder="Feel free to filter contacts..."
-        onChange={handleFilterInput}
+        onChange={handleFilterChange}
         name="filter"
         title="Filtering contact list by name or number."
       />
@@ -25,6 +32,5 @@ export const Filter = ({ setFilter, filter }) => {
 };
 
 Filter.propTypes = {
-  setFilter: PropTypes.func.isRequired,
   filter: PropTypes.string.isRequired,
 };
