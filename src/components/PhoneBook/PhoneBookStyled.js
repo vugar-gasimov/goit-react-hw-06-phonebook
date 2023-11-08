@@ -6,17 +6,51 @@ const rotateHue = keyframes`
   }
 `;
 
+export const PhoneBookHint = styled.p`
+  color: #ff0000;
+  font-size: 14px;
+`;
+
+export const AppContainer = styled.div`
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  text-align: center;
+  padding: 20px;
+  min-height: 100vh;
+  background: linear-gradient(315deg, #03a9f4, #ff0058);
+`;
+
+export const TitleContainer = styled.div`
+  font-size: 24px;
+  color: #333;
+  margin: 20px 0;
+`;
+
+export const ContentContainer = styled.div`
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+`;
+
 export const PhoneBookContainer = styled.div`
   font-family: Arial, sans-serif;
   max-width: 400px;
   margin: 0 auto;
   padding: 20px;
 
-  border: 1px solid #ccc;
+  border: 1px solid transparent;
   border-radius: 8px;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-  background-color: #4158d0;
-  background: linear-gradient(43deg, #4158d0 0%, #c850c0 46%, #ffcc70 100%);
+  background-color: rgba(65, 88, 208, 0.5);
+  background: linear-gradient(
+    43deg,
+    rgba(65, 88, 208, 0.7) 0%,
+    rgba(200, 80, 192, 0.8) 46%,
+    rgba(255, 204, 112, 0.7) 100%
+  );
 `;
 
 export const PhoneBookTitle = styled.h1`
@@ -50,7 +84,12 @@ export const PhoneBookInput = styled.input`
   border: 1px solid #ccc;
   border-radius: 4px;
   outline: none;
-  background: linear-gradient(315deg, #ff0058, #03a9f4);
+  background: linear-gradient(
+    43deg,
+    rgba(255, 0, 88, 0.8),
+    rgba(3, 169, 244, 0.8),
+    rgba(200, 80, 192, 0.8) 70%
+  );
 `;
 
 export const PhoneBookButton = styled.button`
@@ -102,7 +141,7 @@ export const PhoneBookButton = styled.button`
   flex: 1;
   width: fit-content;
   font-size: 18px;
-  background-color: #007bff;
+  background-color: rgba(0, 123, 255, 0.5);
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -113,18 +152,20 @@ export const PhoneBookButton = styled.button`
   margin-top: 8px;
 
   &:disabled {
-    background-color: #ccc;
+    background-color: rgba(0, 123, 255, 0.5);
     cursor: not-allowed;
   }
 
   &:hover:enabled {
-    background-color: #0056b3;
+    background-color: rgba(0, 100, 204, 0.7);
   }
 `;
 
 export const PhoneBookContactList = styled.ul`
   list-style: none;
   padding: 0;
+  max-height: 300px;
+  overflow-y: auto;
 `;
 
 export const PhoneBookContactItem = styled.li`
@@ -151,13 +192,13 @@ export const ListItemContainer = styled.div`
   gap: 10px;
   background: linear-gradient(
     315deg,
-    #ff9f0e,
-    #e440bb,
-    #655adc,
-    #488cfb,
-    #488cfb,
-    #29dbbc,
-    #ddf505
+    rgba(255, 159, 14, 0.6),
+    rgba(228, 64, 187, 0.6),
+    rgba(101, 90, 220, 0.6),
+    rgba(72, 140, 251, 0.6),
+    rgba(72, 140, 251, 0.6),
+    rgba(41, 219, 188, 0.6),
+    rgba(221, 245, 5, 0.6)
   );
 `;
 
@@ -179,13 +220,13 @@ export const DeleteButton = styled.button`
     padding: var(--border-width);
     border-radius: var(--border-radius);
     background-image: conic-gradient(
-      #488cfb,
-      #29dbbc,
-      #ddf505,
-      #ff9f0e,
-      #e440bb,
-      #655adc,
-      #488cfb
+      rgba(72, 140, 251, 1),
+      rgba(41, 219, 188, 1),
+      rgba(221, 245, 5, 1),
+      rgba(255, 159, 14, 1),
+      rgba(228, 64, 187, 1),
+      rgba(101, 90, 220, 1),
+      rgba(72, 140, 251, 1)
     );
     -webkit-mask-image: var(--m-i), var(--m-i);
     mask-image: var(--m-i), var(--m-i);
@@ -214,7 +255,7 @@ export const DeleteButton = styled.button`
   transition: background-color 0.3s;
 
   &:disabled {
-    background-color: #ccc;
+    background-color: rgba(0, 123, 255, 0.5);
     cursor: not-allowed;
   }
 
@@ -222,7 +263,7 @@ export const DeleteButton = styled.button`
     background-color: #0056b3;
   }
 
-  background-color: #007bff;
+  background-color: rgba(0, 123, 255, 0.5);
   color: #fff;
   border: none;
   padding: 6px 14px;

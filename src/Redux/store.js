@@ -1,8 +1,7 @@
-import { createStore } from 'redux';
-import { phoneBookReducer } from './PhoneBook/reducer';
-import { composeWithDevTools } from 'redux-devtools-extension';
+import { configureStore } from '@reduxjs/toolkit';
+import { phoneBookReducer } from './PhoneBook/phoneBookSlice';
+import { filterReducer } from './filterSlice';
 
-export const store = createStore(
-  phoneBookReducer,
-  composeWithDevTools() // Using the redux devtools enhancer
-);
+export const store = configureStore({
+  reducer: { contacts: phoneBookReducer, filter: filterReducer },
+});
